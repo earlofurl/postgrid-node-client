@@ -9,7 +9,7 @@ import { PostGrid } from '../src/index'
   console.log('creating a single Letter...')
   const what = {
     description: 'Cool new letter',
-    pdf: 'https://www.icnaam.org/documents/8x11singlesample.pdf',
+    pdf: 'https://icnaam.org/wp-content/uploads/2024/10/AIP-CP-2017-Troubleshooting.pdf',
     to: {
       firstName: 'Steve',
       lastName: 'Smith',

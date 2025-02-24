@@ -127,6 +127,10 @@ export class LetterApi {
     metadata?: any;
     express?: boolean;
     extraService?: string;
+    attachedPDF?: {
+      placement: 'before_template' | 'after_template';
+      file: string | Buffer;
+    };
   }, options?: {
     idempotencyKey?: string;
   }): Promise<{
@@ -144,7 +148,7 @@ export class LetterApi {
     letter.doubleSided = letter.doubleSided || false
     letter.addressPlacement = letter.addressPlacement || 'insert_blank_page'
     let body = letter
-    if (Buffer.isBuffer(letter.pdf)) {
+    if (Buffer.isBuffer(letter.pdf) || letter.attachedPDF?.file) {
       const form = new FormData()
       for (const [k, v] of Object.entries(letter)) {
         // only add in the entries that have a non-null or defined, value...
@@ -162,6 +166,16 @@ export class LetterApi {
                 })
               } else {
                 form.append(k, v.toString())
+              }
+              break
+            case 'attachedPDF':
+              if (v.placement) {
+                form.append('attachedPDF[placement]', v.placement)
+              }
+              if (Buffer.isBuffer(v.file)) {
+                form.append('attachedPDF[file]', v.file, 'attachment.pdf')
+              } else {
+                form.append('attachedPDF[file]', v.file)
               }
               break
             case 'pdf':
